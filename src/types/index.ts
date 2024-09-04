@@ -2,9 +2,9 @@ export interface Challenge {
     id: number;
     title: string;
     image: string;
-    endsIn?: { days: number; hours: number; mins: number };
-    startDate: Date;
-    endDate: Date | null;
+    description: string;
+    startDate: string;
+    endDate: string;
     level: "Easy" | "Medium" | "Hard";
   }
   

@@ -1,5 +1,6 @@
 import React from "react";
 import { Challenge } from "../types";
+import { Link } from "react-router-dom";
 
 interface EnhancedChallenge extends Challenge {
   status: 'Upcoming' | 'Active' | 'Past';
@@ -53,6 +54,9 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({ challenge }) => {
             ? `Ends in: ${formatTimeRemaining(challenge.timeRemaining)}`
             : `Started on: ${new Date(challenge.startDate).toDateString()}`}
         </p>
+        <Link to={`/challenge/${challenge.id}`} className="bg-white text-[#0B2447] px-6 py-3 rounded-md font-medium text-lg">
+          Participate Now
+        </Link>
       </div>
     </div>
   );

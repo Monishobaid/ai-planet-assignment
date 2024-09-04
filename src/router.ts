@@ -5,9 +5,9 @@ import { components, hooks, utils } from "@generouted/react-router/client";
 
 export type Path =
   | `/`
-  | `/chapters/chapter-01`
-  | `/chapters/chapter-02`
-  | `/dummy-route`;
+  | `/create`
+  | `/challenge/:id`
+  | `/edit/:id`;
 
 export type Params = {};
 
