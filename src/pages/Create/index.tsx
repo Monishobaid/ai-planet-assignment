@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface Challenge {
   id: string;
-  name: string;
+  title: string;
   startDate: string;
   endDate: string;
   description: string;
@@ -11,12 +12,13 @@ interface Challenge {
 }
 
 export const AddChallengeForm: React.FC = () => {
-  const [name, setName] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [description, setDescription] = useState('');
-  const [image, setImage] = useState('');
-  const [level, setLevel] = useState('Easy');
+  const [title, setTitle] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [description, setDescription] = useState("");
+  const [image, setImage] = useState("");
+  const [level, setLevel] = useState("Easy");
+  const navigate = useNavigate();
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
@@ -32,7 +34,7 @@ export const AddChallengeForm: React.FC = () => {
   const handleSubmit = () => {
     const newChallenge: Challenge = {
       id: Date.now().toString(),
-      name,
+      title,
       startDate,
       endDate,
       description,
@@ -40,55 +42,141 @@ export const AddChallengeForm: React.FC = () => {
       level,
     };
 
-    const storedChallenges = localStorage.getItem('challenges');
-    const challenges: Challenge[] = storedChallenges ? JSON.parse(storedChallenges) : [];
+    const storedChallenges = localStorage.getItem("challenges");
+    const challenges: Challenge[] = storedChallenges
+      ? JSON.parse(storedChallenges)
+      : [];
     challenges.push(newChallenge);
 
-    localStorage.setItem('challenges', JSON.stringify(challenges));
+    localStorage.setItem("challenges", JSON.stringify(challenges));
 
-    // Reset the form
-    setName('');
-    setStartDate('');
-    setEndDate('');
-    setDescription('');
-    setImage('');
-    setLevel('Easy');
+    // Redirect to homepage
+    navigate("/");
   };
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h2>Challenge Details</h2>
-      <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+    <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
+      <h2 className="text-2xl font-bold mb-6 text-gray-800">
+        Challenge Details
+      </h2>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
+        className="space-y-4"
+      >
         <div>
-          <label>Challenge Name</label>
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+          <label
+            htmlFor="name"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Challenge Name
+          </label>
+          <input
+            type="text"
+            id="name"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+          />
         </div>
         <div>
-          <label>Start Date</label>
-          <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} required />
+          <label
+            htmlFor="startDate"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Start Date
+          </label>
+          <input
+            type="date"
+            id="startDate"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            required
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+          />
         </div>
         <div>
-          <label>End Date</label>
-          <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} required />
+          <label
+            htmlFor="endDate"
+            className="block text-sm font-medium text-gray-700"
+          >
+            End Date
+          </label>
+          <input
+            type="date"
+            id="endDate"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            required
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+          />
         </div>
         <div>
-          <label>Description</label>
-          <textarea value={description} onChange={(e) => setDescription(e.target.value)} required />
+          <label
+            htmlFor="description"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Description
+          </label>
+          <textarea
+            id="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            required
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            rows={4}
+          />
         </div>
         <div>
-          <label>Image</label>
-          <input type="file" accept="image/*" onChange={handleImageUpload} required />
-          {image && <img src={image} alt="Preview" style={{ width: '100px', height: '100px', marginTop: '10px' }} />}
+          <label
+            htmlFor="image"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Image
+          </label>
+          <input
+            type="file"
+            id="image"
+            accept="image/*"
+            onChange={handleImageUpload}
+            required
+            className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+          />
+          {image && (
+            <img
+              src={image}
+              alt="Preview"
+              className="mt-2 w-32 h-32 object-cover rounded-md"
+            />
+          )}
         </div>
         <div>
-          <label>Level Type</label>
-          <select value={level} onChange={(e) => setLevel(e.target.value)}>
+          <label
+            htmlFor="level"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Level Type
+          </label>
+          <select
+            id="level"
+            value={level}
+            onChange={(e) => setLevel(e.target.value)}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+          >
             <option value="Easy">Easy</option>
             <option value="Medium">Medium</option>
             <option value="Hard">Hard</option>
           </select>
         </div>
-        <button type="submit">Create Challenge</button>
+        <button
+          type="submit"
+          className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        >
+          Create Challenge
+        </button>
       </form>
     </div>
   );

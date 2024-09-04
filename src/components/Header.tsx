@@ -13,14 +13,6 @@ const Header: React.FC = () => {
           />
           <span className="text-xl font-bold">DPhi</span>
         </Link>
-        <nav>
-          <Link
-            to="/create"
-            className="bg-white text-[#0B2447] px-4 py-2 rounded-md font-medium"
-          >
-            Create Challenge
-          </Link>
-        </nav>
       </div>
     </header>
   );
