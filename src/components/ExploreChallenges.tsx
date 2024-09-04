@@ -1,60 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Search, Filter } from "lucide-react";
-
-interface Challenge {
-  id: number;
-  title: string;
-  status: "Upcoming" | "Active" | "Past";
-  image: string;
-  startsIn?: { days: number; hours: number; mins: number };
-  endsIn?: { days: number; hours: number; mins: number };
-  startDate: Date;
-  endDate: Date | null;
-  level: "Easy" | "Medium" | "Hard";
-}
-
-const challenges: Challenge[] = [
-  {
-    id: 1,
-    title: "Data Science Bootcamp - Graded Datathon",
-    status: "Upcoming",
-    image: "/api/placeholder/300/200",
-    startsIn: { days: 0, hours: 15, mins: 22 },
-    startDate: new Date("2024-09-10T10:00:00"),
-    endDate: null, // No end date for upcoming challenges
-    level: "Medium",
-  },
-  {
-    id: 2,
-    title: "Data Sprint 72 - Butterfly Identification",
-    status: "Upcoming",
-    image: "/api/placeholder/300/200",
-    startsIn: { days: 0, hours: 12, mins: 34 },
-    startDate: new Date("2024-09-09T14:00:00"),
-    endDate: null,
-    level: "Hard",
-  },
-  {
-    id: 3,
-    title: "Data Sprint 71 - Weather Recognition",
-    status: "Active",
-    image: "/api/placeholder/300/200",
-    endsIn: { days: 1, hours: 17, mins: 10 },
-    startDate: new Date("2024-09-02T09:00:00"),
-    endDate: new Date("2024-09-07T17:00:00"),
-    level: "Easy",
-  },
-  // Add more challenge objects as needed
-];
+import { challenges as defaultChallenges } from "../data/ChallengesData";
+import { Challenge } from "../types";
 
 const ExploreChallenges: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filterOpen, setFilterOpen] = useState<boolean>(false);
-  const [filters, setFilters] = useState<{ status: string[]; level: string[] }>({
-    status: [],
-    level: [],
-  });
+  const [filters, setFilters] = useState<{ status: string[]; level: string[] }>(
+    {
+      status: [],
+      level: [],
+    }
+  );
   const [sortOrder, setSortOrder] = useState<string>("newest");
+  const [challenges, setChallenges] = useState<Challenge[]>([]);
+
+  useEffect(() => {
+    const storedChallenges = localStorage.getItem("challenges");
+    let combinedChallenges = [];
+
+    if (storedChallenges) {
+      const parsedStoredChallenges = JSON.parse(storedChallenges);
+      combinedChallenges = [...parsedStoredChallenges, ...defaultChallenges];
+    } else {
+      combinedChallenges = [...defaultChallenges];
+    }
+    combinedChallenges = combinedChallenges.filter(
+      (challenge, index, self) =>
+        index === self.findIndex((ch) => ch.id === challenge.id)
+    );
+    localStorage.setItem("challenges", JSON.stringify(combinedChallenges));
+    setChallenges(combinedChallenges);
+  }, [defaultChallenges]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -91,13 +68,19 @@ const ExploreChallenges: React.FC = () => {
       ) {
         return false;
       }
-      return challenge.title.toLowerCase().includes(searchTerm.toLowerCase());
+      return searchTerm
+        ? challenge.title.toLowerCase().includes(searchTerm.toLowerCase())
+        : true;
     })
     .sort((a, b) => {
       if (sortOrder === "newest") {
-        return new Date(b.startDate).getTime() - new Date(a.startDate).getTime();
+        return (
+          new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
+        );
       } else {
-        return new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
+        return (
+          new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+        );
       }
     });
 
@@ -204,40 +187,24 @@ const ExploreChallenges: React.FC = () => {
                 {challenge.status}
               </span>
               <h3 className="text-lg font-semibold mb-2">{challenge.title}</h3>
-              {challenge.status === "Upcoming" ? (
-                <p>
-                  Starts in: {challenge.startsIn?.days}d{" "}
-                  {challenge.startsIn?.hours}h {challenge.startsIn?.mins}m
-                </p>
-              ) : challenge.status === "Active" ? (
-                <p>
-                  Ends in: {challenge.endsIn?.days}d {challenge.endsIn?.hours}h{" "}
-                  {challenge.endsIn?.mins}m
-                </p>
-              ) : (
-                <p>
-                  Started: {challenge.startDate.toLocaleDateString()}
-                  <br />
-                  Ended: {challenge.endDate?.toLocaleDateString()}
-                </p>
-              )}
-              <button
-                className="mt-4 bg-green-500 text-white px-4 py-2 rounded-md w-full"
-                onClick={() => navigateToChallengePage(challenge.id)}
-              >
-                Participate Now
-              </button>
+              <p className="text-sm text-gray-300 mb-2">
+                Level: {challenge.level}
+              </p>
+              <p className="text-sm text-gray-300">
+                {challenge.status === "Upcoming" && challenge.startsIn
+                  ? `Starts in: ${challenge.startsIn.days}d ${challenge.startsIn.hours}h ${challenge.startsIn.mins}m`
+                  : challenge.status === "Active" && challenge.endsIn
+                  ? `Ends in: ${challenge.endsIn.days}d ${challenge.endsIn.hours}h ${challenge.endsIn.mins}m`
+                  : `Started on: ${new Date(
+                      challenge.startDate
+                    ).toDateString()}`}
+              </p>
             </div>
           </div>
         ))}
       </div>
     </div>
   );
-};
-
-// Function to navigate to the challenge detail page
-const navigateToChallengePage = (id: number) => {
-  window.location.href = `/challenge/${id}`; // or use a router if you have one
 };
 
 export default ExploreChallenges;
