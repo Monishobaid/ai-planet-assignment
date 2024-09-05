@@ -59,7 +59,7 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({ challenge }) => {
           {challenge.title}
         </h3>
 
-        {challenge.status === "Upcoming" && challenge.timeRemaining && (
+        {challenge.status !== "Past" && challenge.timeRemaining && (
           <>
             <p className="text-center text-gray-600 text-sm mb-2">Starts in </p>
             <div className="flex justify-center items-center space-x-4 text-2xl font-semibold">
@@ -92,7 +92,7 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({ challenge }) => {
             to={`/challenge/${challenge.id}`}
             className="bg-green-500 text-white px-6 py-3 rounded-lg font-medium text-lg hover:bg-green-600"
           >
-            Participate Now
+            {challenge.status === "Past" ? "View Event" : "Participate Now"}
           </Link>
         </div>
       </div>
