@@ -11,6 +11,14 @@ interface EnhancedChallenge extends Challenge {
   } | null;
 }
 
+/**
+ * Custom hook for managing challenges.
+ *
+ * @param searchTerm - The search term for filtering challenges by title.
+ * @param sortOrder - The sort order for the challenges (either "newest" or "oldest").
+ * @returns An object containing the challenges, filters, setFilters, and filteredChallenges.
+ */
+
 export const useChallenge = (searchTerm: string, sortOrder: string) => {
   const [challenges, setChallenges] = useState<EnhancedChallenge[]>([]);
   const [filters, setFilters] = useState<{ status: string[]; level: string[] }>(
@@ -20,6 +28,7 @@ export const useChallenge = (searchTerm: string, sortOrder: string) => {
     }
   );
 
+    // This useEffect fetches challenge data from localStorage and combines it with default challenges.
   useEffect(() => {
     const storedChallenges = localStorage.getItem("challenges");
     let combinedChallenges = [];
@@ -35,6 +44,7 @@ export const useChallenge = (searchTerm: string, sortOrder: string) => {
         index === self.findIndex((ch) => ch.id === challenge.id)
     );
 
+    // Here, I enhance each challenge with its status (Upcoming, Active, Past) and calculate the time remaining.
     const enhancedChallenges = combinedChallenges.map((challenge) => {
       const now = new Date();
       const startDate = new Date(challenge.startDate);
@@ -42,7 +52,7 @@ export const useChallenge = (searchTerm: string, sortOrder: string) => {
 
       let status: "Upcoming" | "Active" | "Past";
       let timeRemaining = null;
-
+       // If the start date is in the future, the challenge is "Upcoming", and I calculate the time remaining.  
       if (startDate > now) {
         status = "Upcoming";
         const diff = startDate.getTime() - now.getTime();
@@ -51,6 +61,7 @@ export const useChallenge = (searchTerm: string, sortOrder: string) => {
           hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
           minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
         };
+        // If the current time is between the start and end date, the challenge is "Active".
       } else if (!endDate || endDate > now) {
         status = "Active";
         if (endDate) {
@@ -64,9 +75,11 @@ export const useChallenge = (searchTerm: string, sortOrder: string) => {
           };
         }
       } else {
+        // Else the challenge is "Past".
         status = "Past";
       }
-
+      
+      // I return the enhanced challenge with its status and time remaining.
       return { ...challenge, status, timeRemaining };
     });
 

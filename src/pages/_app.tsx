@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Header from "../components/Header";
 
-function App() {
+const App: React.FC = () => {
   return (
     <div className="min-h-screen text-black">
       <Header />

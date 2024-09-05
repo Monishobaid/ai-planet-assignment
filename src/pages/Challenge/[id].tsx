@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Clock } from "lucide-react";
 import { Challenge } from "../../types";
 
-const ChallengeUI: React.FC = () => {
+const ChallengeOverview: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [challenge, setChallenge] = React.useState<Challenge | null>(null);
   const navigate = useNavigate();
@@ -90,4 +90,4 @@ const ChallengeUI: React.FC = () => {
   );
 };
 
-export default ChallengeUI;
+export default ChallengeOverview;
