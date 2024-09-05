@@ -1,12 +1,11 @@
-import React, { useEffect } from 'react';
+import { FC } from 'react';
 import Hero from '../../components/Hero';
 import ParticipationReasons from '../../components/ParticipationReasons';
 import ExploreChallenges from '../../components/ExploreChallenges';
 
-const HomePage = () => {
-
+const HomePage: FC = () => {
   return (
-    <div className="">
+    <div>
       <Hero />
       <ParticipationReasons />
       <ExploreChallenges />
