@@ -27,6 +27,18 @@ const ChallengeUI: React.FC = () => {
     navigate(`/edit/${id}`);
   };
 
+  const handleDeleteClick = () => {
+    const storedChallenges = localStorage.getItem("challenges");
+    if (storedChallenges) {
+      let challengesData: Challenge[] = JSON.parse(storedChallenges);
+      challengesData = challengesData.filter(
+        (challenge) => challenge.id !== Number(id)
+      );
+      localStorage.setItem("challenges", JSON.stringify(challengesData));
+      navigate("/");
+    }
+  };
+
   return (
     <div className="bg-gray-900 text-white min-h-screen">
       <main className="container mx-auto px-4 py-8">
@@ -64,7 +76,10 @@ const ChallengeUI: React.FC = () => {
           >
             Edit
           </button>
-          <button className="border border-red-500 text-red-500 px-4 py-2 rounded">
+          <button
+            className="border border-red-500 text-red-500 px-4 py-2 rounded"
+            onClick={handleDeleteClick}
+          >
             Delete
           </button>
         </div>

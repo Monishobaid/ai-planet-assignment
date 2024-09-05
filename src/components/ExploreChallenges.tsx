@@ -19,7 +19,7 @@ const ExploreChallenges: React.FC = () => {
   const toggleFilter = () => setFilterOpen(!filterOpen);
 
   return (
-    <div className="py-16">
+    <div className="p-16">
       <h2 className="text-3xl font-bold mb-8">Explore Challenges</h2>
       <div className="flex justify-between mb-6">
         <SearchBar searchTerm={searchTerm} onSearch={setSearchTerm} />

@@ -56,7 +56,7 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({ challenge }) => {
           </span>
         </div>
         <h3 className="text-xl font-bold text-center mb-4">
-          {challenge.title} {JSON.stringify(challenge.timeRemaining)}
+          {challenge.title}
         </h3>
 
         {challenge.status === "Upcoming" && challenge.timeRemaining && (
