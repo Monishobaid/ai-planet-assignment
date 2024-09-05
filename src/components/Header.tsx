@@ -1,17 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Logo from '../assets/icons/main_logo_with_darktext_dphi 1.svg';
 
 const Header: React.FC = () => {
   return (
-    <header className="bg-[#0B2447] py-4">
-      <div className="container mx-auto px-4 flex justify-between items-center">
+    <header className="bg-white py-4">
+      <div className="px-4 flex justify-between items-center">
         <Link to="/" className="flex items-center">
           <img
-            src="/api/placeholder/40/40"
+            src={Logo}
             alt="DPhi logo"
             className="mr-2"
           />
-          <span className="text-xl font-bold">DPhi</span>
         </Link>
       </div>
     </header>

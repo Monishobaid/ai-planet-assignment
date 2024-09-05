@@ -1,38 +1,53 @@
-import React from 'react';
+import React from "react";
+import NoteBook from "../assets/icons/carbon_notebook-reference.svg";
+import Challenge from "../assets/icons/Robot.svg";
+import Community from "../assets/icons/Vector.svg";
+import Recognition from "../assets/icons/IdentificationCard.svg";
 
 const reasons = [
   {
-    icon: "📊",
+    icon: NoteBook, // Correctly assigning the icon
     title: "Prove your skills",
-    description: "Gain substantial experience by solving real-world problems and pit against others to come up with innovative solutions."
+    description:
+      "Gain substantial experience by solving real-world problems and pit against others to come up with innovative solutions.",
   },
   {
-    icon: "👥",
+    icon: Challenge,
     title: "Learn from community",
-    description: "One can look and analyze the solutions submitted by the other Data Scientists in the community and learn from them."
+    description:
+      "One can look and analyze the solutions submitted by the other Data Scientists in the community and learn from them.",
   },
   {
-    icon: "🏆",
+    icon: Community,
     title: "Challenge yourself",
-    description: "There is nothing for you to lose by participating in a challenge. You can fail safe, learn out of the entire experience and bounce back harder."
+    description:
+      "There is nothing for you to lose by participating in a challenge. You can fail safe, learn out of the entire experience and bounce back harder.",
   },
   {
-    icon: "🌟",
+    icon: Recognition,
     title: "Earn recognition",
-    description: "You will stand out from the crowd if you do well in AI challenges, it not only helps you shine in the community but also earns rewards."
-  }
+    description:
+      "You will stand out from the crowd if you do well in AI challenges, it not only helps you shine in the community but also earns rewards.",
+  },
 ];
 
-const ParticipationReasons = () => {
+const ParticipationReasons: React.FC = () => {
   return (
-    <div className="py-16">
-      <h2 className="text-3xl font-bold mb-8 text-center">Why Participate in AI Challenges?</h2>
+    <div className="bg-white width-full py-10">
+      <h2 className="text-3xl font-bold mb-8 text-center">
+        Why Participate in AI Challenges?
+      </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {reasons.map((reason, index) => (
           <div key={index} className="bg-white bg-opacity-10 p-6 rounded-lg">
-            <div className="text-4xl mb-4">{reason.icon}</div>
+            <img
+              src={reason.icon}
+              alt={reason.title}
+              className="mb-4 w-16 h-16"
+            />{" "}
+            {/* Render the image */}
             <h3 className="text-xl font-semibold mb-2">{reason.title}</h3>
-            <p className="text-gray-300">{reason.description}</p>
+            <p className="text-gray-600">{reason.description}</p>
           </div>
         ))}
       </div>

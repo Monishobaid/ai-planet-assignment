@@ -3,7 +3,7 @@ import { Challenge } from "../types";
 import { Link } from "react-router-dom";
 
 interface EnhancedChallenge extends Challenge {
-  status: 'Upcoming' | 'Active' | 'Past';
+  status: "Upcoming" | "Active" | "Past";
   timeRemaining: {
     days: number;
     hours: number;
@@ -18,45 +18,83 @@ interface ChallengeCardProps {
 const ChallengeCard: React.FC<ChallengeCardProps> = ({ challenge }) => {
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'Upcoming':
-        return 'bg-yellow-400';
-      case 'Active':
-        return 'bg-green-400';
-      case 'Past':
-        return 'bg-gray-400';
+      case "Upcoming":
+        return "bg-yellow-200 text-black";
+      case "Active":
+        return "bg-green-400 text-white";
+      case "Past":
+        return "bg-gray-400 text-white";
       default:
-        return 'bg-blue-400';
+        return "bg-blue-400";
     }
   };
 
-  const formatTimeRemaining = (time: { days: number; hours: number; minutes: number } | null) => {
-    if (!time) return '';
-    return `${time.days}d ${time.hours}h ${time.minutes}m`;
+  const formatTimeRemaining = (
+    time: { days: number; hours: number; minutes: number } | null
+  ) => {
+    if (!time) return "00 : 00 : 00";
+    return `${time.days < 10 ? `0${time.days}` : time.days} : ${
+      time.hours < 10 ? `0${time.hours}` : time.hours
+    } : ${time.minutes < 10 ? `0${time.minutes}` : time.minutes}`;
   };
 
   return (
-    <div className="bg-white bg-opacity-10 rounded-lg overflow-hidden">
+    <div className="max-w-sm bg-white rounded-xl shadow-md overflow-hidden border border-gray-200 text-black">
       <img
         src={challenge.image}
         alt={challenge.title}
-        className="w-full h-40 object-cover"
+        className="w-full h-36 object-cover"
       />
       <div className="p-4">
-        <span className={`inline-block ${getStatusColor(challenge.status)} text-[#0B2447] px-2 py-1 rounded-full text-sm font-semibold mb-2`}>
-          {challenge.status}
-        </span>
-        <h3 className="text-lg font-semibold mb-2">{challenge.title}</h3>
-        <p className="text-sm text-gray-300 mb-2">Level: {challenge.level}</p>
-        <p className="text-sm text-gray-300">
-          {challenge.status === "Upcoming"
-            ? `Starts in: ${formatTimeRemaining(challenge.timeRemaining)}`
-            : challenge.status === "Active"
-            ? `Ends in: ${formatTimeRemaining(challenge.timeRemaining)}`
-            : `Started on: ${new Date(challenge.startDate).toDateString()}`}
-        </p>
-        <Link to={`/challenge/${challenge.id}`} className="bg-white text-[#0B2447] px-6 py-3 rounded-md font-medium text-lg">
-          Participate Now
-        </Link>
+        <div className="flex justify-center mb-2">
+          <span
+            className={`inline-block ${getStatusColor(
+              challenge.status
+            )} px-3 py-1 rounded-full text-sm font-medium`}
+          >
+            {challenge.status}
+          </span>
+        </div>
+        <h3 className="text-xl font-bold text-center mb-4">
+          {challenge.title} {JSON.stringify(challenge.timeRemaining)}
+        </h3>
+
+        {challenge.status === "Upcoming" && challenge.timeRemaining && (
+          <>
+            <p className="text-center text-gray-600 text-sm mb-2">Starts in </p>
+            <div className="flex justify-center items-center space-x-4 text-2xl font-semibold">
+              <div className="flex flex-col items-center">
+                <span>
+                  {formatTimeRemaining(challenge.timeRemaining).split(" : ")[0]}
+                </span>
+                <span className="text-xs text-gray-500">Days</span>
+              </div>
+              <span>:</span>
+              <div className="flex flex-col items-center">
+                <span>
+                  {formatTimeRemaining(challenge.timeRemaining).split(" : ")[1]}
+                </span>
+                <span className="text-xs text-gray-500">Hours</span>
+              </div>
+              <span>:</span>
+              <div className="flex flex-col items-center">
+                <span>
+                  {formatTimeRemaining(challenge.timeRemaining).split(" : ")[2]}
+                </span>
+                <span className="text-xs text-gray-500">Mins</span>
+              </div>
+            </div>
+          </>
+        )}
+
+        <div className="flex justify-center mt-6">
+          <Link
+            to={`/challenge/${challenge.id}`}
+            className="bg-green-500 text-white px-6 py-3 rounded-lg font-medium text-lg hover:bg-green-600"
+          >
+            Participate Now
+          </Link>
+        </div>
       </div>
     </div>
   );
