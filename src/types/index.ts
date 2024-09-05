@@ -5,6 +5,7 @@ export interface Challenge {
     description: string;
     startDate: string;
     endDate: string;
+    status?: "Upcoming" | "Active" | "Past";
     level: "Easy" | "Medium" | "Hard";
   }
   

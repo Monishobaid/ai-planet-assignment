@@ -4,7 +4,7 @@ import { Clock } from "lucide-react";
 import { Challenge } from "../../types";
 
 const ChallengeUI: React.FC = () => {
-  const { id } = useParams<{ id: string }>(); // Get the challenge ID from the URL
+  const { id } = useParams<{ id: string }>();
   const [challenge, setChallenge] = React.useState<Challenge | null>(null);
   const navigate = useNavigate();
 
@@ -70,12 +70,14 @@ const ChallengeUI: React.FC = () => {
         </div>
 
         <div className="mt-8 flex justify-end">
-          <button
-            className="bg-green-600 text-white px-4 py-2 rounded mr-2"
-            onClick={handleEditClick}
-          >
-            Edit
-          </button>
+          {challenge.status !== "Past" && (
+            <button
+              className="bg-green-600 text-white px-4 py-2 rounded mr-2"
+              onClick={handleEditClick}
+            >
+              Edit
+            </button>
+          )}
           <button
             className="border border-red-500 text-red-500 px-4 py-2 rounded"
             onClick={handleDeleteClick}
